@@ -1,13 +1,28 @@
 {
-  "name": "schengen-visa-readiness-agent",
+  "name": "champion-brew",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "python3 -m http.server 4173",
-    "build": "node scripts/build.mjs",
-    "test": "node --test src/**/*.test.js",
-    "guidelines:refresh": "node scripts/refresh-guidelines.mjs",
-    "preview": "python3 -m http.server 4173 --directory dist"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "next": "15.3.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "recharts": "2.15.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.29",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "typescript": "5.8.3",
+    "tailwindcss": "3.4.17",
+    "postcss": "8.5.4",
+    "autoprefixer": "10.4.21",
+    "tsx": "4.19.4"
   }
 }

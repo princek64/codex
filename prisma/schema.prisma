@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BeanOrigin {
+  ETHIOPIA
+  COLOMBIA
+  PANAMA
+  KENYA
+}
+
+enum BeanProcess {
+  WASHED
+  NATURAL
+  HONEY
+}
+
+enum BeanRoast {
+  LIGHT
+  MEDIUM
+}
+
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  name          String?
+  brewSessions  BrewSession[]
+  brewNotes     BrewNote[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Bean {
+  id           String       @id @default(cuid())
+  name         String
+  origin       BeanOrigin
+  region       String
+  process      BeanProcess
+  roast        BeanRoast
+  tastingNotes String[]
+  recipes      Recipe[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Champion {
+  id          String   @id @default(cuid())
+  name        String
+  competition String
+  bio         String?
+  recipes     Recipe[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Recipe {
+  id             String           @id @default(cuid())
+  slug           String           @unique
+  title          String
+  overview       String
+  doseGrams      Float
+  waterGrams     Float
+  temperatureC   Float
+  grind          String
+  targetTimeSec  Int
+  equipment      String[]
+  sourceUrl      String?
+  licenseNotes   String?
+  beanId         String
+  bean           Bean             @relation(fields: [beanId], references: [id])
+  championId     String
+  champion       Champion         @relation(fields: [championId], references: [id])
+  steps          BrewStep[]
+  curvePoints    BrewCurvePoint[]
+  brewSessions   BrewSession[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model BrewStep {
+  id            String   @id @default(cuid())
+  recipeId      String
+  recipe        Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  order         Int
+  timeSec       Int
+  label         String
+  instruction   String
+  targetWeightG Float
+}
+
+model BrewCurvePoint {
+  id       String @id @default(cuid())
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  timeSec  Int
+  weightG  Float
+
+  @@index([recipeId, timeSec])
+}
+
+model BrewSession {
+  id            String             @id @default(cuid())
+  userId        String?
+  user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  recipeId      String
+  recipe        Recipe             @relation(fields: [recipeId], references: [id])
+  startedAt     DateTime           @default(now())
+  endedAt       DateTime?
+  overallScore  Int?
+  timingMatch   Int?
+  weightMatch   Int?
+  flowStability Int?
+  points        BrewSessionPoint[]
+  notes         BrewNote[]
+}
+
+model BrewSessionPoint {
+  id              String      @id @default(cuid())
+  brewSessionId   String
+  brewSession     BrewSession @relation(fields: [brewSessionId], references: [id], onDelete: Cascade)
+  timeSec         Int
+  weightG         Float
+  targetWeightG   Float
+  differenceG     Float
+  flowRateGPerMin Float?
+
+  @@index([brewSessionId, timeSec])
+}
+
+model BrewNote {
+  id            String      @id @default(cuid())
+  brewSessionId String
+  brewSession   BrewSession @relation(fields: [brewSessionId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  body          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

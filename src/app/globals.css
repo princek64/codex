@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #fff6e8 0, #f7efe4 30%, #ede0d1 100%);
+  color: #211813;
+}
+
+a {
+  text-decoration: none;
+}
+
+.card {
+  border: 1px solid rgba(120, 91, 67, 0.14);
+  border-radius: 2rem;
+  background: rgba(255, 250, 243, 0.82);
+  box-shadow: 0 24px 70px rgba(67, 43, 28, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9b6235;
+}
+
+.button-primary,
+.button-secondary {
+  min-height: 3.25rem;
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  font-weight: 800;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.button-primary {
+  background: #211813;
+  color: #fffaf3;
+  box-shadow: 0 18px 32px rgba(33, 24, 19, 0.2);
+}
+
+.button-secondary {
+  border: 1px solid rgba(33, 24, 19, 0.14);
+  background: rgba(255, 255, 255, 0.6);
+  color: #211813;
+}
+
+.button-primary:hover,
+.button-secondary:hover {
+  transform: translateY(-1px);
+}
